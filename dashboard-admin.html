@@ -393,7 +393,8 @@
 
         // Check admin access
         document.addEventListener('DOMContentLoaded', function() {
-            if (!sessionStorage.getItem('adminAccess')) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!currentUser.role || currentUser.role !== 'admin') {
                 window.location.href = 'index.html';
                 return;
             }
@@ -437,7 +438,7 @@
         }
 
         function logout() {
-            sessionStorage.removeItem('adminAccess');
+            localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         }
     </script>

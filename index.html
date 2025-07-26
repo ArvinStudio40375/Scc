@@ -216,7 +216,7 @@
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="mb-0 text-muted">
-                        Developed by <span class="admin-trigger" style="cursor: pointer; color: #007bff;">Arvin Erlangga.M.Sc.IT</span>
+                        Developed by <span class="admin-trigger" style="cursor: pointer; color: #007bff; text-decoration: underline;">Arvin Erlangga.M.Sc.IT</span>
                     </p>
                 </div>
             </div>
@@ -257,30 +257,74 @@
         // Initialize Feather icons
         feather.replace();
 
-        // Admin access trigger
-        document.querySelector('.admin-trigger').addEventListener('click', function() {
-            const modal = new bootstrap.Modal(document.getElementById('adminAccessModal'));
-            modal.show();
-        });
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Admin access trigger
+            const adminTrigger = document.querySelector('.admin-trigger');
+            if (adminTrigger) {
+                adminTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Admin trigger clicked');
+                    const modal = new bootstrap.Modal(document.getElementById('adminAccessModal'));
+                    modal.show();
+                });
+            }
 
-        // Admin login handler
-        document.getElementById('adminLoginBtn').addEventListener('click', function() {
+            // Admin login handler
+            const adminLoginBtn = document.getElementById('adminLoginBtn');
+            if (adminLoginBtn) {
+                adminLoginBtn.addEventListener('click', async function() {
             const accessCode = document.getElementById('accessCode').value;
             const errorDiv = document.getElementById('adminError');
+            const btn = this;
             
-            if (accessCode === '011090') {
-                // Store admin session
-                sessionStorage.setItem('adminAccess', 'true');
-                window.location.href = 'dashboard-admin.html';
-            } else {
-                errorDiv.textContent = 'Kode akses tidak valid!';
+            if (!accessCode) {
+                errorDiv.textContent = 'Masukkan kode akses!';
                 errorDiv.classList.remove('d-none');
+                return;
             }
-        });
 
-        // Check if user is already logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
+            btn.disabled = true;
+            btn.textContent = 'Memverifikasi...';
+            
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: accessCode })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store admin session
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    window.location.href = 'dashboard-admin.html';
+                } else {
+                    errorDiv.textContent = data.error || 'Kode akses tidak valid!';
+                    errorDiv.classList.remove('d-none');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Terjadi kesalahan. Coba lagi.';
+                errorDiv.classList.remove('d-none');
+            } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Masuk';
+                }
+                });
+            }
+
+            // Enter key support for admin access
+            const accessCodeInput = document.getElementById('accessCode');
+            if (accessCodeInput) {
+                accessCodeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById('adminLoginBtn').click();
+                    }
+                });
+            }
         });
     </script>
 </body>
