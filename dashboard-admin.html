@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - SmartCare</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="d-flex align-items-center">
+                <i data-feather="shield" class="sidebar-logo"></i>
+                <div class="ms-2">
+                    <h5 class="mb-0 text-white">SmartCare</h5>
+                    <small class="text-white-50">Admin Panel</small>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                <i data-feather="home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#verifikasi" class="nav-link" data-section="verifikasi">
+                <i data-feather="user-check"></i>
+                <span>Verifikasi Mitra</span>
+            </a>
+            <a href="#topup" class="nav-link" data-section="topup">
+                <i data-feather="credit-card"></i>
+                <span>Konfirmasi Top Up</span>
+            </a>
+            <a href="#saldo" class="nav-link" data-section="saldo">
+                <i data-feather="dollar-sign"></i>
+                <span>Kirim Saldo</span>
+            </a>
+            <a href="#pesanan" class="nav-link" data-section="pesanan">
+                <i data-feather="package"></i>
+                <span>Kelola Pesanan</span>
+            </a>
+            <a href="#chat" class="nav-link" data-section="chat">
+                <i data-feather="message-circle"></i>
+                <span>Live Chat</span>
+            </a>
+            <a href="#users" class="nav-link" data-section="users">
+                <i data-feather="users"></i>
+                <span>Data Pengguna</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100" onclick="logout()">
+                <i data-feather="log-out" class="me-2"></i>Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <nav class="topnav">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link text-dark d-lg-none" id="sidebarToggle">
+                    <i data-feather="menu"></i>
+                </button>
+                <h4 class="mb-0 ms-2" id="pageTitle">Dashboard</h4>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <button class="btn btn-link text-dark dropdown-toggle" data-bs-toggle="dropdown">
+                        <i data-feather="user"></i>
+                        <span class="ms-2">Admin</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i data-feather="settings" class="me-2"></i>Pengaturan</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()"><i data-feather="log-out" class="me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card stats-primary">
+                            <div class="stats-content">
+                                <div class="stats-number" id="totalUsers">0</div>
+                                <div class="stats-label">Total Users</div>
+                            </div>
+                            <div class="stats-icon">
+                                <i data-feather="users"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card stats-success">
+                            <div class="stats-content">
+                                <div class="stats-number" id="totalMitra">0</div>
+                                <div class="stats-label">Total Mitra</div>
+                            </div>
+                            <div class="stats-icon">
+                                <i data-feather="briefcase"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card stats-warning">
+                            <div class="stats-content">
+                                <div class="stats-number" id="pendingVerifikasi">0</div>
+                                <div class="stats-label">Menunggu Verifikasi</div>
+                            </div>
+                            <div class="stats-icon">
+                                <i data-feather="clock"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card stats-info">
+                            <div class="stats-content">
+                                <div class="stats-number" id="totalPesanan">0</div>
+                                <div class="stats-label">Total Pesanan</div>
+                            </div>
+                            <div class="stats-icon">
+                                <i data-feather="package"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Aktivitas Terbaru</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-list" id="activityList">
+                                    <div class="text-center text-muted py-4">
+                                        <i data-feather="activity" class="mb-2"></i>
+                                        <p>Belum ada aktivitas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Quick Actions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" onclick="showSection('verifikasi')">
+                                        <i data-feather="user-check" class="me-2"></i>Verifikasi Mitra
+                                    </button>
+                                    <button class="btn btn-success" onclick="showSection('topup')">
+                                        <i data-feather="credit-card" class="me-2"></i>Konfirmasi Top Up
+                                    </button>
+                                    <button class="btn btn-warning" onclick="showSection('pesanan')">
+                                        <i data-feather="package" class="me-2"></i>Kelola Pesanan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verifikasi Mitra Section -->
+            <div id="verifikasi-section" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Verifikasi Mitra Baru</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Tanggal Daftar</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mitraVerifikasiTable">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i data-feather="user-x" class="mb-2"></i>
+                                            <p>Belum ada mitra yang perlu diverifikasi</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Up Section -->
+            <div id="topup-section" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Konfirmasi Top Up Saldo</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Jumlah</th>
+                                        <th>Tanggal</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topupTable">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">
+                                            <i data-feather="credit-card" class="mb-2"></i>
+                                            <p>Belum ada permintaan top up</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kirim Saldo Section -->
+            <div id="saldo-section" class="content-section">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Kirim Saldo Manual</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="kirimSaldoForm">
+                                    <div class="mb-3">
+                                        <label for="targetUser" class="form-label">Pilih Pengguna</label>
+                                        <select class="form-select" id="targetUser" required>
+                                            <option value="">Pilih pengguna...</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="jumlahSaldo" class="form-label">Jumlah Saldo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="jumlahSaldo" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="keterangan" rows="3" placeholder="Keterangan transaksi..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i data-feather="send" class="me-2"></i>Kirim Saldo
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pesanan Section -->
+            <div id="pesanan-section" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Kelola Pesanan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>User</th>
+                                        <th>Mitra</th>
+                                        <th>Deskripsi</th>
+                                        <th>Status</th>
+                                        <th>Tanggal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pesananTable">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted py-4">
+                                            <i data-feather="package" class="mb-2"></i>
+                                            <p>Belum ada pesanan</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Section -->
+            <div id="chat-section" class="content-section">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Daftar Chat</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="chat-list" id="chatList">
+                                    <div class="text-center text-muted py-4">
+                                        <i data-feather="message-circle" class="mb-2"></i>
+                                        <p>Belum ada percakapan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Live Chat</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chat-container" id="chatContainer">
+                                    <div class="text-center text-muted py-5">
+                                        <i data-feather="message-square" class="mb-2"></i>
+                                        <p>Pilih percakapan untuk mulai chat</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users-section" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Data Pengguna</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Tanggal Daftar</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted py-4">
+                                            <i data-feather="users" class="mb-2"></i>
+                                            <p>Memuat data pengguna...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Initialize Feather icons
+        feather.replace();
+
+        // Check admin access
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!sessionStorage.getItem('adminAccess')) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            initAdminDashboard();
+        });
+
+        // Sidebar toggle
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Navigation handling
+        document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                showSection(section);
+                
+                // Update active nav
+                document.querySelectorAll('.sidebar-nav .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update page title
+                const title = this.querySelector('span').textContent;
+                document.getElementById('pageTitle').textContent = title;
+            });
+        });
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminAccess');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
